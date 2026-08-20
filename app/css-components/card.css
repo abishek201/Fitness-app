@@ -1,0 +1,16 @@
+.feature-card-1{
+  background-color: #7FB069;
+  height: 50vh;
+  width: 80%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15vh;
+  justify-content:space-between;
+
+}
+.image-of-feature{
+  align-items: center;
+  margin-top: 20vh;
+}
