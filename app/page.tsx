@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Card1 from "./components/card1";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
           <p>
             JOIN THE COMMUNITY OF FITNESS JOURNEY AND REACH YOUR GOAL FASTER
           </p>
-          <button className="enter-btn">startforfree</button>
+          <Link href="/login"><button className="enter-btn">startforfree</button></Link>
         </div>
         <div className="-hero-image">
           <div>

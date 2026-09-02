@@ -1,17 +1,25 @@
-body{
-  background-color: #c7bea8;
+body {
+  background-color: rgb(121, 113, 89);
+  font-family: 'Times New Roman', Times, serif;
 }
-.hero-content{
+.hero-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  justify-content:space-between;
+  justify-content: space-between;
   margin: 60px;
 }
-.enter-btn{
-  background-color: #7FB069;
+.enter-btn {
+  background-color: #7fb069;
   border-radius: 10px;
   padding: 15px;
   width: 20vh;
-  
+}
+.center-cont {
+  margin: 30vh;
+  align-content: center;
+  position: absolute;
+  left: 50vh;
+  align-items:left;
+ 
 }

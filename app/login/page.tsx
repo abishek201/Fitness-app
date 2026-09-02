@@ -1,4 +1,5 @@
 import "./login.css"
+import Link from "next/link";
 
 export default function login(){
     return(
@@ -13,7 +14,7 @@ export default function login(){
             <button className="login-button">create account</button>
             <br></br>
             <input type="text"></input><br></br>
-            <button className="login-button-2">continue with email</button>
+           <Link href="/age"><button className="login-button-2">continue with email</button></Link>
 
         </div>
         </>
