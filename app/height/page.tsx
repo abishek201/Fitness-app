@@ -1,55 +1,48 @@
 "use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import './height.css';
 
-export default function height() {
-  const [height, setHeight] = useState<number>();
-
-   useEffect(() => {
-    const saved = localStorage.getItem('userForm');
-    if (saved) {
-      const data = JSON.parse(saved);
-      if (data.height !== undefined) {
-        setHeight(data.height);
-      }
-    }
-  }, []);
-
-  function handleSubmit(value: number) {
-    setHeight(value);
-
-    const existing = localStorage.getItem("userForm");
-    const formData = existing ? JSON.parse(existing) : {};
-     formData.height = value === '' ? '' : Number(value); 
-
-     localStorage.setItem('userForm', JSON.stringify(formData)); 
-    
-   
-
-  
-
-  }
+export default function HeightPage() {
+  const [height, setHeight] = useState(65);
+  const [unit, setUnit] = useState('cms');
 
   return (
     <>
-      <div className="brand-layout">
-        <h1>BRAND NAME</h1>
-      </div>
-      <div className="center-cont">
-        <h2>What is your current height</h2>
-        <input
-          className="input-field"
-          type="number"
-          value={height}
-          placeholder="height in cms"
-          onChange={(e) => handleSubmit(Number(e.target.value))}
-        ></input>
-        <br></br>
-        <div className="submit-btn">
-          <Link href="/weight">
-            <button type="submit">submit</button>
-          </Link>
+      <Head>
+        <title>Height - Brand Name</title>
+      </Head>
+      <div className="ht-page">
+        <h2 className="ht-logo">BRAND NAME</h2>
+        <h1 className="ht-title">what is your current height</h1>
+        <div className="ht-display">
+          <span className="ht-number">{height}</span>
+          <span className="ht-unit">{unit}</span>
         </div>
+        <input
+          type="range"
+          min="100"
+          max="250"
+          value={height}
+          onChange={(e) => setHeight(e.target.value)}
+          className="ht-slider"
+        />
+        <div className="ht-units">
+          <button
+            className={unit === 'cms' ? 'ht-unit-btn active' : 'ht-unit-btn'}
+            onClick={() => setUnit('cms')}
+          >
+            cms
+          </button>
+          <button
+            className={unit === 'ft' ? 'ht-unit-btn active' : 'ht-unit-btn'}
+            onClick={() => setUnit('ft')}
+          >
+            ft
+          </button>
+        </div>
+        <Link href="/main" className="ht-next">submit</Link>
       </div>
     </>
   );

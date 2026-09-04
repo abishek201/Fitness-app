@@ -1,4 +1,4 @@
-body {
+/* body {
   background-color: rgb(121, 113, 89);
   font-family: 'Times New Roman', Times, serif;
 }
@@ -22,4 +22,12 @@ body {
   left: 50vh;
   align-items:left;
  
+} */
+*{
+  margin: 0;
+  padding: 0;
+}
+Image{
+  object-fit: fill;
+
 }

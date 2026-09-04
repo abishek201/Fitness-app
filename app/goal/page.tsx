@@ -1,48 +1,26 @@
-"use client";
+// pages/goal.js
+import Head from 'next/head';
+import Link from 'next/link';
+import './goal.css';
 
-import { useEffect, useState } from "react";
-
-export default function goal() {
-  const [goal, setgoal] = useState<string>();
-  useEffect(() => {
-    const saved = localStorage.getItem("userForm");
-    if (saved) {
-      const data = JSON.parse(saved);
-      if (data.goal !== undefined) {
-        setgoal(data.goal);
-      }
-    }
-  }, []);
-
-  const handleSubmit = (value: string) => {
-    setgoal(value);
-   
-  };
-
-  const existing = localStorage.getItem("userForm");
-  const formData = existing ? JSON.parse(existing) : {};
-  formData.goal = goal;
-  localStorage.setItem("userForm", JSON.stringify(formData));
+export default function GoalPage() {
+  const goals = ['lean body', 'weight gain', 'fat loss', 'weight loss'];
 
   return (
     <>
-      <div className="brand-layout">
-        <h1>BRAND NAME</h1>
-      </div>
-      <div className="center-cont">
-        <h2>what is your body goal</h2>
-        <button type="submit" onClick={() => handleSubmit("lean body")}>
-          lean body
-        </button>
-        <br></br>
-        <button type="submit" onClick={() => handleSubmit("weight gain")}>
-          weight gain
-        </button>
-        <br></br>
-        <button type="submit" onClick={() => handleSubmit("fat loss")}>
-          fat loss
-        </button>
-        <br></br>
+      <Head>
+        <title>Body Goal - Brand Name</title>
+      </Head>
+      <div className="goal-page">
+        <h2 className="goal-logo">BRAND NAME</h2>
+        <h1 className="goal-title">what is your body goal</h1>
+        <div className="goal-list">
+          {goals.map((g) => (
+            <Link key={g} href="/age" className="goal-btn">
+              {g}
+            </Link>
+          ))}
+        </div>
       </div>
     </>
   );
