@@ -22,13 +22,17 @@ export default function AgePage() {
   
      
     },[])
-  
-  
+
+
+   useEffect(() => {
     const existing = localStorage.getItem('userform');
     const formData = existing ? JSON.parse(existing) : {};
     formData.age = age;
     localStorage.setItem("userform", JSON.stringify(formData));
-
+  }, [age]);
+  
+  
+   
   return (
     <>
       <Head>

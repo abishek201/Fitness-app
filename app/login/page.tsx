@@ -22,12 +22,15 @@ export default function LoginPage() {
     
        
       },[])
-    
-    
-      const existing = localStorage.getItem('userform');
+      useEffect(() => {
+         const existing = localStorage.getItem('userform');
       const formData = existing ? JSON.parse(existing) : {};
       formData.name = name;
       localStorage.setItem("userform", JSON.stringify(formData));
+      }, [name]);
+    
+    
+     
 
 
   return (

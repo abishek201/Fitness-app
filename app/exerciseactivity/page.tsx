@@ -21,13 +21,16 @@ export default function ExerciseActivityPage() {
   
      
     },[])
-  
-  
-    const existing = localStorage.getItem('userform');
-    const formData = existing ? JSON.parse(existing) : {};
-    formData.activity = act;
-    localStorage.setItem("userform", JSON.stringify(formData));
 
+    useEffect(() => {
+      const existing = localStorage.getItem('userform');
+      const formData = existing ? JSON.parse(existing) : {};
+      formData.activity = act;
+      localStorage.setItem("userform", JSON.stringify(formData));
+    }, [act]);
+  
+  
+    
   return (
     <>
       <Head>

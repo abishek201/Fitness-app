@@ -22,12 +22,16 @@ export default function BodyFatPage() {
     
        
       },[])
+
+      useEffect(() => {
+        const existing = localStorage.getItem('userform');
+        const formData = existing ? JSON.parse(existing) : {};
+        formData.fat = percent;
+        localStorage.setItem("userform", JSON.stringify(formData));
+      }, [percent]);
     
     
-      const existing = localStorage.getItem('userform');
-      const formData = existing ? JSON.parse(existing) : {};
-      formData.fat = percent;
-      localStorage.setItem("userform", JSON.stringify(formData));
+      
 
   return (
     <>

@@ -25,11 +25,15 @@ export default function GoalPage() {
    
   },[])
 
+  useEffect(() => {
+    const existing = localStorage.getItem('userform');
+    const formData = existing ? JSON.parse(existing) : {};
+    formData.goal = goal;
+    localStorage.setItem("userform", JSON.stringify(formData));
+  }, [goal]);
 
-  const existing = localStorage.getItem('userform');
-  const formData = existing ? JSON.parse(existing) : {};
-  formData.goal = goal;
-  localStorage.setItem("userform", JSON.stringify(formData));
+
+
   return (
     <>
       <Head>

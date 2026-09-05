@@ -23,12 +23,16 @@ export default function HeightPage() {
     
        
       },[])
+      
+      useEffect(() => {
+        const existing = localStorage.getItem('userform');
+        const formData = existing ? JSON.parse(existing) : {};
+        formData.height = height;
+        localStorage.setItem("userform", JSON.stringify(formData));
+      }, [height]);
     
     
-      const existing = localStorage.getItem('userform');
-      const formData = existing ? JSON.parse(existing) : {};
-      formData.height = height;
-      localStorage.setItem("userform", JSON.stringify(formData));
+      
 
   return (
     <>
