@@ -31,14 +31,14 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>Brand Name - Tracking App</title>
+        <title>TRACK MY FITNESSS</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       {/* Navigation */}
       <nav className="navbar">
         <div className="nav-container">
-          <div className="logo">GET FIT</div>
+          <div className="logo">TRACK MY FITNESS</div>
           <ul className="nav-links">
             <li><a href="#features">Features</a></li>
             <li><a href="#reviews">Reviews</a></li>
@@ -53,7 +53,7 @@ export default function LandingPage() {
         <div className="hero-content scroll-animate">
           <p className="hero-label">INTRODUCING</p>
           <h1 className="hero-title">
-            <span className="brand-highlight">GET FIT</span>
+            <span className="brand-highlight">TRACK MY FITNESS</span>
             <br />
             TRACKING APP
           </h1>

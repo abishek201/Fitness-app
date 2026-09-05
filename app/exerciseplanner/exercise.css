@@ -1,0 +1,199 @@
+/* styles/exercise-planner.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+.ex-page {
+  min-height: 100vh;
+  background: #f5f5f4;
+  font-family: 'Inter', sans-serif;
+}
+
+.ex-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.ex-logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: 1px;
+}
+
+.ex-nav-link {
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.ex-nav-link:hover {
+  color: #10b981;
+}
+
+.ex-loading {
+  text-align: center;
+  padding: 4rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.ex-back {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0.8rem 2rem;
+  background: #10b981;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.ex-back:hover {
+  background: #059669;
+}
+
+.ex-header {
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.ex-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 0.5rem;
+}
+
+.ex-subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ex-goal-badge {
+  display: inline-block;
+  padding: 0.4rem 1.2rem;
+  background: #ecfdf5;
+  color: #059669;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.ex-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.ex-day-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.5s ease-out forwards;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.ex-day-card:hover {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transform: translateY(-4px);
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ex-day-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.ex-day-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.2rem;
+}
+
+.ex-day-header span {
+  font-size: 0.85rem;
+  color: #10b981;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ex-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.ex-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.ex-item:last-child {
+  border-bottom: none;
+}
+
+.ex-name {
+  color: #374151;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.ex-meta {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #f9fafb;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .ex-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1rem 3rem;
+  }
+
+  .ex-nav {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .ex-header {
+    padding: 2rem 1rem 1.5rem;
+  }
+
+  .ex-title {
+    font-size: 1.5rem;
+  }
+}

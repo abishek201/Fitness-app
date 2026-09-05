@@ -1,0 +1,68 @@
+/* styles/exercise-activity.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+.ex-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafaf9;
+  font-family: 'Inter', sans-serif;
+  padding: 2rem;
+}
+
+.ex-logo {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #10b981;
+  margin-bottom: 2rem;
+  letter-spacing: 2px;
+}
+
+.ex-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 2.5rem;
+}
+
+.ex-list {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.ex-btn {
+  display: block;
+  width: 100%;
+  padding: 1.3rem;
+  background: #7cb342;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 50px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  animation: slideUp 0.4s ease-out backwards;
+}
+
+.ex-btn:nth-child(1) { animation-delay: 0.1s; }
+.ex-btn:nth-child(2) { animation-delay: 0.2s; }
+.ex-btn:nth-child(3) { animation-delay: 0.3s; }
+.ex-btn:nth-child(4) { animation-delay: 0.4s; }
+
+.ex-btn:hover {
+  background: #689f38;
+  transform: scale(1.02);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
