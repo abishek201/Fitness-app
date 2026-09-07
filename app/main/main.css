@@ -25,7 +25,7 @@
 
 .dash-nav-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 4rem;
 }
 
 .dash-nav-links a {
@@ -258,6 +258,7 @@
 
   .dash-macros {
     grid-template-columns: 1fr;
+   
   }
 
   .dash-nav {

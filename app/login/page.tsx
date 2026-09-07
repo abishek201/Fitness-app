@@ -40,7 +40,7 @@ export default function LoginPage() {
       </Head>
       <div className="login-page">
         <div className="login-card">
-          <h2 className="login-logo">BRAND NAME</h2>
+          <h2 className="login-logo">TRACK MY FITNESS</h2>
           <h1 className="login-title">welcome to fitness</h1>
           <p className="login-sub">create account to get started</p>
 

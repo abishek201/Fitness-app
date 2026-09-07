@@ -42,9 +42,9 @@ export default function LandingPage() {
           <ul className="nav-links">
             <li><a href="#features">Features</a></li>
             <li><a href="#reviews">Reviews</a></li>
-            <li><a href="#about">About</a></li>
+            
           </ul>
-          <button className="nav-cta">START FOR FREE</button>
+          <Link href="/login"><button className="nav-cta">START FOR FREE</button></Link>
         </div>
       </nav>
 
@@ -128,14 +128,14 @@ export default function LandingPage() {
       {/* CTA Banner */}
       <section className="cta-banner scroll-animate">
         <h2>Nutrition tracking for real life.</h2>
-        <button className="cta-banner-btn">START FOR FREE</button>
+        <Link href="/login"><button className="cta-banner-btn">START FOR FREE</button></Link>
       </section>
 
       {/* Footer */}
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-brand">
-            <h3>BRAND NAME</h3>
+            <h3>TRACK MY FITNESS</h3>
             <p>Nutrition tracking for real life.</p>
           </div>
           <div className="footer-links">
@@ -143,14 +143,13 @@ export default function LandingPage() {
             <ul>
               <li><a href="#">About Us</a></li>
              
-              
-              <li><a href="#">Advertise With Us</a></li>
+             
              
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2026 BRAND NAME. All rights reserved.</p>
+          <p>© 2026 TRACK MY FITNESS. All rights reserved.</p>
         </div>
       </footer>
     </>

@@ -1,0 +1,176 @@
+/* styles/protein-foods.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+.prot-page {
+  min-height: 100vh;
+  background: #f5f5f4;
+  font-family: 'Inter', sans-serif;
+}
+
+.prot-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.prot-logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: 1px;
+}
+
+.prot-nav-link {
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.prot-nav-link:hover {
+  color: #10b981;
+}
+
+.prot-header {
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.prot-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 0.4rem;
+}
+
+.prot-sub {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.prot-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.prot-group {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.prot-cat-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+  border-left: 4px solid #10b981;
+}
+
+.prot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.prot-card {
+  background: white;
+  border-radius: 14px;
+  padding: 1.2rem;
+  border: 1px solid #e5e7eb;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.prot-card:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transform: translateY(-3px);
+}
+
+.prot-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.6rem;
+}
+
+.prot-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  line-height: 1.3;
+  padding-right: 0.5rem;
+}
+
+.prot-badge {
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.prot-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-bottom: 0.8rem;
+}
+
+.prot-bar {
+  width: 100%;
+  height: 6px;
+  background: #f3f4f6;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.prot-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 3px;
+  transition: width 0.8s ease-out;
+}
+
+@media (max-width: 640px) {
+  .prot-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .prot-nav {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .prot-header {
+    padding: 2rem 1rem 1.5rem;
+  }
+
+  .prot-title {
+    font-size: 1.5rem;
+  }
+
+  .prot-main {
+    padding: 0 1rem 3rem;
+  }
+}
