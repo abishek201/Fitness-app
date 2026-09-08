@@ -75,7 +75,7 @@ export default function ProteinFoodsPage() {
       <div className="prot-page">
         <nav className="prot-nav">
           <span className="prot-logo">TRACK MY FITNESS</span>
-          <Link href="/dashboard" className="prot-nav-link">Back to Dashboard</Link>
+          <Link href="/main" className="prot-nav-link">Back to Dashboard</Link>
         </nav>
 
         <header className="prot-header">

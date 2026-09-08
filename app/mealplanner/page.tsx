@@ -21,7 +21,7 @@ const foodDB = {
   oil: { name: 'Olive Oil', p: 0, c: 0, f: 100, cal: 884 },
   egg: { name: 'Whole Eggs', p: 13, c: 1, f: 11, cal: 155 },
   bread: { name: 'Whole Wheat Bread', p: 13, c: 41, f: 3.5, cal: 265 },
-  turkey: { name: 'Turkey Breast', p: 29, c: 0, f: 1, cal: 135 },
+  turkey: { name: ' Breast chicken', p: 45, c: 0, f: 1, cal: 135 },
   avocado: { name: 'Avocado', p: 2, c: 9, f: 15, cal: 160 },
   salmon: { name: 'Salmon Fillet', p: 20, c: 0, f: 13, cal: 208 },
   potato: { name: 'Sweet Potato', p: 1.6, c: 20, f: 0.1, cal: 86 },
@@ -317,7 +317,7 @@ export default function MealPlannerPage() {
       <div className="mp-page">
         <h2 className="mp-logo">BRAND NAME</h2>
         <p className="mp-loading">Loading your meal plan...</p>
-        <Link href="/dashboard" className="mp-back">Go to Dashboard</Link>
+        <Link href="/main" className="mp-back">Go to Dashboard</Link>
       </div>
     );
   }

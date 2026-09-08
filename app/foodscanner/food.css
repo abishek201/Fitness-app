@@ -1,0 +1,462 @@
+/* styles/food-scanner.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+.scan-page {
+  min-height: 100vh;
+  background: #f5f5f4;
+  font-family: 'Inter', sans-serif;
+}
+
+.scan-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.scan-logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: 1px;
+}
+
+.scan-nav-link {
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.scan-nav-link:hover {
+  color: #10b981;
+}
+
+.scan-header {
+  text-align: center;
+  padding: 2.5rem 2rem 1.5rem;
+}
+
+.scan-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 0.3rem;
+}
+
+.scan-sub {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.scan-main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
+/* Upload Area */
+.scan-upload {
+  border: 2px dashed #d1d5db;
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.scan-upload:hover {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.scan-upload-icon {
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.scan-upload:hover .scan-upload-icon {
+  color: #10b981;
+}
+
+.scan-upload-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.4rem;
+}
+
+.scan-upload-hint {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.scan-file-input {
+  display: none;
+}
+
+/* Preview Frame */
+.scan-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.scan-frame {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #1a1a2e;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.scan-img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Scanning Overlay */
+.scan-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    transparent 50%,
+    rgba(16, 185, 129, 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+  animation: scanMove 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes scanMove {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.scan-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scan-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #10b981;
+  border-radius: 50%;
+  animation: scanPulse 1.5s ease-out infinite;
+}
+
+@keyframes scanPulse {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.scan-label {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  animation: scanFade 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes scanFade {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+.scan-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #10b981;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  animation: popIn 0.4s ease-out;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.scan-again {
+  padding: 0.7rem 1.8rem;
+  background: white;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.scan-again:hover {
+  border-color: #10b981;
+  color: #10b981;
+  background: #f0fdf4;
+}
+
+/* Results */
+.scan-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  animation: fadeUp 0.5s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.scan-section {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.scan-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Detected Foods */
+.scan-foods {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.scan-food {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  opacity: 0;
+  transform: translateX(-10px);
+  animation: slideRight 0.4s ease-out forwards;
+}
+
+@keyframes slideRight {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.scan-food:last-child {
+  border-bottom: none;
+}
+
+.scan-food-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.scan-food-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.scan-food-grams {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.scan-confidence {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.scan-confidence-bar {
+  width: 60px;
+  height: 6px;
+  background: #f3f4f6;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.scan-confidence-fill {
+  height: 100%;
+  background: #10b981;
+  border-radius: 3px;
+  transition: width 0.8s ease-out;
+}
+
+.scan-confidence-num {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #059669;
+  min-width: 32px;
+  text-align: right;
+}
+
+/* Macro Cards */
+.scan-macro-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.scan-macro-card {
+  border-radius: 14px;
+  padding: 1.2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scan-macro-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.scan-macro-card.cal {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+}
+
+.scan-macro-card.p {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.scan-macro-card.c {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+
+.scan-macro-card.f {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.scan-macro-value {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 0.1rem;
+}
+
+.scan-macro-unit {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.scan-macro-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Micronutrients */
+.scan-micros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.scan-micro {
+  text-align: center;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.scan-micro span {
+  display: block;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-bottom: 0.3rem;
+}
+
+.scan-micro strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+/* Log Button */
+.scan-log-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.scan-log-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .scan-main {
+    padding: 0 1rem 3rem;
+  }
+
+  .scan-macro-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .scan-micros {
+    grid-template-columns: 1fr;
+  }
+
+  .scan-nav {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+}
