@@ -9,7 +9,8 @@ export default function DiseaseForm() {
   const [disease, setDisease] = useState("");
 
   // Load saved data from localStorage on first render
-  useState(() => {
+  
+  useEffect(() => {
     const saved = localStorage.getItem("userform");
     if (saved) {
       const data = JSON.parse(saved);
@@ -20,7 +21,7 @@ export default function DiseaseForm() {
         setHasDisease("no");
       }
     }
-  });
+  },[]);
 
   // Save to localStorage whenever hasDisease or disease changes
   useEffect(() => {
