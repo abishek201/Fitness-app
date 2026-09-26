@@ -325,11 +325,11 @@ export default function MealPlannerPage() {
   return (
     <>
       <Head>
-        <title>Meal Planner - Brand Name</title>
+        <title>Meal Planner - track my fitness</title>
       </Head>
       <div className="mp-page">
         <nav className="mp-nav">
-          <span className="mp-logo">BRAND NAME</span>
+          <span className="mp-logo">track my fitness</span>
           <Link href="/dashboard" className="mp-nav-link">Back to Dashboard</Link>
         </nav>
 

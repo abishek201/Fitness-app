@@ -5,7 +5,7 @@ import { useState } from 'react';
 import './body-fat.css';
 import { useEffect } from 'react';
 export default function BodyFatPage() {
-  const [percent, setPercent] = useState(65);
+  const [percent, setPercent] = useState(20);
 
     const handlepercent = (value: number) => {
         setPercent(value);
@@ -36,7 +36,7 @@ export default function BodyFatPage() {
   return (
     <>
       <Head>
-        <title>Body Fat - Brand Name</title>
+        <title>Body Fat - Track my fitness</title>
       </Head>
       <div className="bf-page">
         <h2 className="bf-logo">TRACK MY FITNESS</h2>

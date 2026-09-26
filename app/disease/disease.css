@@ -1,0 +1,107 @@
+.page {
+  background-color: #F9F7F2;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.brand {
+  font-size: 28px;
+  letter-spacing: 4px;
+  margin: 0 0 8px 0;
+  color: #10b981;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-weight: normal;
+  color: #888888;
+  margin: 0 0 28px 0;
+  letter-spacing: 2px;
+}
+
+.question {
+  font-size: 15px;
+  color: #333333;
+  margin: 0 0 20px 0;
+}
+
+.options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.option {
+  background-color: #F9F7F2;
+  border: 2px solid #e5e0d8;
+  border-radius: 12px;
+  padding: 14px 40px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #333333;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.option:hover {
+  border-color: #c9c2b6;
+}
+
+.selected {
+  border-color: #4a7c59;
+  background-color: #eef5f0;
+  color: #2e5c3d;
+  font-weight: bold;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #e5e0d8;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 15px;
+  background-color: #F9F7F2;
+  color: #333333;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #4a7c59;
+}
+
+.summary {
+  margin: 28px;
+  font-size: 13px;
+  color: #999999;
+}
+.submit{
+     padding: 0.9rem 3rem;
+  background: #10b981;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s ease;
+
+}
+.submit:hover{
+    background: #059669;
+
+}

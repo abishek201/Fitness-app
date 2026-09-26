@@ -322,11 +322,11 @@ export default function ExercisePlannerPage() {
   return (
     <>
       <Head>
-        <title>Exercise Planner - Brand Name</title>
+        <title>Exercise Planner - Track my fitness</title>
       </Head>
       <div className="ex-page">
         <nav className="ex-nav">
-          <span className="ex-logo">BRAND NAME</span>
+          <span className="ex-logo">Track my fitness</span>
           <Link href="/main" className="ex-nav-link">Back to Dashboard</Link>
         </nav>
 

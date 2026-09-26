@@ -1,218 +1,213 @@
+"use client";
 
+import { useState } from "react";
+import Link from "next/link";
+import "./food.css";
 
-"use client"
-import Head from 'next/head';
-import Link from 'next/link';
-import { useState, useRef } from 'react';
-import './food.css';
+export default function FoodScanner() {
+  const [image, setImage] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [nutrition, setNutrition] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>("");
 
-export default function FoodScannerPage() {
-  const [image, setImage] = useState(null);
-  const [scanning, setScanning] = useState(false);
-  const [scanned, setScanned] = useState(false);
-  const [results, setResults] = useState(null);
-  const fileInputRef = useRef(null);
-
-  const handleFile = (file) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setImage(url);
-    setScanned(false);
-    setResults(null);
-    startScan();
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 800;
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scaleSize;
+
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const base64 = canvas.toDataURL("image/jpeg", 0.8);
+        setImage(base64);
+        setPreview(base64);
+        setError("");
+        setNutrition(null);
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
   };
 
-  const startScan = () => {
-    setScanning(true);
-    // Simulate AI processing delay
-    setTimeout(() => {
-      setScanning(false);
-      setScanned(true);
-      setResults({
-        foods: [
-          { name: 'Grilled Chicken Breast', grams: 150, confidence: 96 },
-          { name: 'Steamed Broccoli', grams: 80, confidence: 92 },
-          { name: 'Brown Rice', grams: 120, confidence: 88 },
-          { name: 'Cherry Tomatoes', grams: 40, confidence: 85 },
-        ],
-        nutrients: {
-          calories: 485,
-          protein: 42,
-          carbs: 48,
-          fats: 12,
-          fiber: 6,
-          sugar: 4,
-          sodium: 320,
-        },
+  const analyzeFood = async () => {
+    if (!image) return;
+    setIsLoading(true);
+    setError("");
+    setNutrition(null);
+
+    try {
+      const response = await fetch("/api/analyze-food", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image }),
       });
-    }, 2800);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Backend returns validated object directly (result.output)
+      if (data && data.foodName) {
+        setNutrition(data);
+      } else {
+        throw new Error("Invalid response format");
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    handleFile(file);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
+  const resetScanner = () => {
+    setImage(null);
+    setPreview(null);
+    setNutrition(null);
+    setError("");
   };
 
   return (
     <>
-      <Head>
-        <title>Food Scanner - Brand Name</title>
-      </Head>
-      <div className="scan-page">
-        <nav className="scan-nav">
-          <span className="scan-logo">BRAND NAME</span>
-          <Link href="/dashboard" className="scan-nav-link">Back to Dashboard</Link>
-        </nav>
+      <nav className="mp-nav">
+        <span className="mp-logo">Track my fitness</span>
+        <Link href="/main" className="mp-nav-link">
+          Back to Dashboard
+        </Link>
+      </nav>
 
-        <header className="scan-header">
-          <h1 className="scan-title">Food Scanner</h1>
-          <p className="scan-sub">Snap or upload a photo of your plate</p>
-        </header>
+      <div className="scanner-container">
+        <div className="scanner-card">
+          <h1 className="scanner-title">🥗 AI Food Scanner</h1>
+          <p className="scanner-subtitle">
+            Upload a photo of your meal to get instant nutrition facts
+          </p>
 
-        <main className="scan-main">
-          {/* Upload Area */}
-          {!image && (
-            <div
-              className="scan-upload"
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <div className="scan-upload-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                  <circle cx="12" cy="13" r="4" />
-                </svg>
-              </div>
-              <p className="scan-upload-text">Tap to upload or drop an image here</p>
-              <span className="scan-upload-hint">JPG, PNG up to 10MB</span>
+          {/* Upload area */}
+          <div className="upload-section">
+            <label className="upload-area">
               <input
-                ref={fileInputRef}
                 type="file"
                 accept="image/*"
-                className="scan-file-input"
-                onChange={(e) => handleFile(e.target.files[0])}
+                onChange={handleImageUpload}
+                className="file-input"
               />
-            </div>
-          )}
+              {preview ? (
+                <div className="preview-container">
+                  <img
+                    src={preview}
+                    alt="Food preview"
+                    className="preview-image"
+                  />
+                  <div className="preview-overlay">
+                    <span>Click to change photo</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="upload-placeholder">
+                  <div className="upload-icon">📸</div>
+                  <p className="upload-text">Click to upload food photo</p>
+                  <p className="upload-hint">JPG, PNG supported</p>
+                </div>
+              )}
+            </label>
+          </div>
 
-          {/* Image Preview with Scanner */}
-          {image && (
-            <div className="scan-preview">
-              <div className="scan-frame">
-                <img src={image} alt="Plate" className="scan-img" />
-                {scanning && (
-                  <>
-                    <div className="scan-overlay" />
-                    <div className="scan-line" />
-                    <div className="scan-grid">
-                      <div className="scan-dot" style={{ top: '20%', left: '30%' }} />
-                      <div className="scan-dot" style={{ top: '45%', left: '60%' }} />
-                      <div className="scan-dot" style={{ top: '70%', left: '25%' }} />
-                    </div>
-                    <div className="scan-label">Analyzing plate...</div>
-                  </>
-                )}
-                {scanned && !scanning && (
-                  <div className="scan-badge">Analysis Complete</div>
-                )}
+          {/* Error message */}
+          {error && <div className="error-message">⚠️ {error}</div>}
+
+          {/* Action buttons */}
+          <div className="button-group">
+            <button
+              onClick={analyzeFood}
+              disabled={!image || isLoading}
+              className="scan-button"
+            >
+              {isLoading ? "Analyzing..." : "🔍 Scan Macros"}
+            </button>
+
+            {(image || nutrition) && (
+              <button onClick={resetScanner} className="reset-button">
+                🔄 Reset
+              </button>
+            )}
+          </div>
+
+          {/* Results */}
+          {nutrition && (
+            <div className="results-section">
+              <div className="food-header">
+                <h2 className="food-name">{nutrition.foodName}</h2>
+                <span className="confidence-badge">
+                  {nutrition.confidence}% confident
+                </span>
               </div>
 
-              {!scanning && (
-                <button
-                  className="scan-again"
-                  onClick={() => {
-                    setImage(null);
-                    setScanned(false);
-                    setResults(null);
-                  }}
-                >
-                  Scan Another Plate
-                </button>
+              {/* Macro cards */}
+              <div className="macros-grid">
+                <div className="macro-card">
+                  <div className="macro-label">Calories</div>
+                  <div className="macro-value">
+                    {nutrition.macros?.calories}
+                    <span className="macro-unit">kcal</span>
+                  </div>
+                </div>
+                <div className="macro-card">
+                  <div className="macro-label">Protein</div>
+                  <div className="macro-value">
+                    {nutrition.macros?.protein}
+                    <span className="macro-unit">g</span>
+                  </div>
+                </div>
+                <div className="macro-card">
+                  <div className="macro-label">Carbs</div>
+                  <div className="macro-value">
+                    {nutrition.macros?.carbs}
+                    <span className="macro-unit">g</span>
+                  </div>
+                </div>
+                <div className="macro-card">
+                  <div className="macro-label">Fat</div>
+                  <div className="macro-value">
+                    {nutrition.macros?.fat}
+                    <span className="macro-unit">g</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Detected ingredients (read-only tags) */}
+              {nutrition.ingredients && nutrition.ingredients.length > 0 && (
+                <div className="ingredients-section">
+                  <h3 className="section-title">Detected Ingredients</h3>
+                  <div className="ingredients-list">
+                    {nutrition.ingredients.map((ing: string, index: number) => (
+                      <span key={index} className="ingredient-tag">
+                        {ing}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* AI advice */}
+              {nutrition.advice && (
+                <div className="advice-box">💡 {nutrition.advice}</div>
               )}
             </div>
           )}
-
-          {/* Results */}
-          {results && (
-            <div className="scan-results">
-              {/* Detected Foods */}
-              <section className="scan-section">
-                <h2 className="scan-section-title">Detected Foods</h2>
-                <div className="scan-foods">
-                  {results.foods.map((food, i) => (
-                    <div key={i} className="scan-food" style={{ animationDelay: `${i * 100}ms` }}>
-                      <div className="scan-food-info">
-                        <span className="scan-food-name">{food.name}</span>
-                        <span className="scan-food-grams">~{food.grams}g</span>
-                      </div>
-                      <div className="scan-confidence">
-                        <div className="scan-confidence-bar">
-                          <div
-                            className="scan-confidence-fill"
-                            style={{ width: `${food.confidence}%` }}
-                          />
-                        </div>
-                        <span className="scan-confidence-num">{food.confidence}%</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Macro Cards */}
-              <section className="scan-section">
-                <h2 className="scan-section-title">Nutrition Breakdown</h2>
-                <div className="scan-macro-grid">
-                  <div className="scan-macro-card cal">
-                    <span className="scan-macro-value">{results.nutrients.calories}</span>
-                    <span className="scan-macro-unit">kcal</span>
-                    <span className="scan-macro-label">Calories</span>
-                  </div>
-                  <div className="scan-macro-card p">
-                    <span className="scan-macro-value">{results.nutrients.protein}g</span>
-                    <span className="scan-macro-label">Protein</span>
-                  </div>
-                  <div className="scan-macro-card c">
-                    <span className="scan-macro-value">{results.nutrients.carbs}g</span>
-                    <span className="scan-macro-label">Carbs</span>
-                  </div>
-                  <div className="scan-macro-card f">
-                    <span className="scan-macro-value">{results.nutrients.fats}g</span>
-                    <span className="scan-macro-label">Fats</span>
-                  </div>
-                </div>
-              </section>
-
-              {/* Micronutrients */}
-              <section className="scan-section">
-                <h2 className="scan-section-title">Additional Nutrients</h2>
-                <div className="scan-micros">
-                  <div className="scan-micro">
-                    <span>Fiber</span>
-                    <strong>{results.nutrients.fiber}g</strong>
-                  </div>
-                  <div className="scan-micro">
-                    <span>Sugar</span>
-                    <strong>{results.nutrients.sugar}g</strong>
-                  </div>
-                  <div className="scan-micro">
-                    <span>Sodium</span>
-                    <strong>{results.nutrients.sodium}mg</strong>
-                  </div>
-                </div>
-              </section>
-
-              {/* Add to Log Button */}
-              <button className="scan-log-btn">Add to Daily Log</button>
-            </div>
-          )}
-        </main>
+        </div>
       </div>
     </>
   );

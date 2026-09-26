@@ -71,7 +71,7 @@ export default function DashboardPage() {
           <div className="dash-nav-links">
             <a href="/exerciseplanner">exercise planner</a>
             <a href="/mealplanner">meal planner</a>
-            {/* <a href="/foodscanner">food scanner</a> */}
+            <a href="/foodscanner">food scanner</a>
           </div>
         </nav>
 
@@ -96,7 +96,7 @@ export default function DashboardPage() {
                 <strong>{data.weight}</strong>
               </div>
               <div className="detail-row">
-                <span>body fat</span>
+                <span>body fat %</span>
                 <strong>{data.fat}</strong>
               </div>
             </div>

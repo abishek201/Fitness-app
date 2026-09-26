@@ -43,7 +43,7 @@ export default function WeightPage() {
           />
           <span className="wt-unit">kg</span>
         </div>
-        <Link href="/exerciseactivity" className="wt-submit" onClick={handleSave}>
+        <Link href="/allergen" className="wt-submit" onClick={handleSave}>
           submit
         </Link>
       </div>
