@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "./css-components/card.css";
 import { Analytics } from "@vercel/analytics/next"
@@ -22,8 +23,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+<<<<<<< HEAD
       <body>{children}
         <Analytics/>
+=======
+      <body>
+        {children}
+        <Analytics />
+>>>>>>> 8e756e425130bcadefee75e50a4a155c7dfca19b
       </body>
     </html>
   );
