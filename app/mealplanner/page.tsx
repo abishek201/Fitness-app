@@ -1,414 +1,242 @@
-"use client"
-import Head from 'next/head';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import './meal.css';
 
-const STORAGE_KEY = 'userform';
+export default function MealPlanner() {
+  const [userData, setUserData] = useState<any>(null);
+  const [mealPlan, setMealPlan] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [activeDay, setActiveDay] = useState(0);
 
-// Macros per 100g for each food
-const foodDB = {
-  oats: { name: 'Oatmeal', p: 16.9, c: 66, f: 6.9, cal: 389 },
-  milk: { name: 'Whole Milk', p: 3.4, c: 5, f: 3.2, cal: 65 },
-  banana: { name: 'Banana', p: 1.1, c: 23, f: 0.3, cal: 89 },
-  peanut: { name: 'Peanut Butter', p: 25, c: 20, f: 50, cal: 588 },
-  shake: { name: 'Whey Protein', p: 82, c: 8, f: 3.5, cal: 400 },
-  yogurt: { name: 'Greek Yogurt', p: 10, c: 3.6, f: 0.7, cal: 59 },
-  almonds: { name: 'Almonds', p: 21, c: 22, f: 49, cal: 579 },
-  chicken: { name: 'Chicken Breast', p: 31, c: 0, f: 3.6, cal: 165 },
-  rice: { name: 'Brown Rice (cooked)', p: 2.7, c: 23, f: 0.9, cal: 112 },
-  broccoli: { name: 'Broccoli', p: 2.8, c: 7, f: 0.4, cal: 34 },
-  oil: { name: 'Olive Oil', p: 0, c: 0, f: 100, cal: 884 },
-  egg: { name: 'Whole Eggs', p: 13, c: 1, f: 11, cal: 155 },
-  bread: { name: 'Whole Wheat Bread', p: 13, c: 41, f: 3.5, cal: 265 },
-  turkey: { name: ' Breast chicken', p: 45, c: 0, f: 1, cal: 135 },
-  avocado: { name: 'Avocado', p: 2, c: 9, f: 15, cal: 160 },
-  salmon: { name: 'Salmon Fillet', p: 20, c: 0, f: 13, cal: 208 },
-  potato: { name: 'Sweet Potato', p: 1.6, c: 20, f: 0.1, cal: 86 },
-  quinoa: { name: 'Quinoa (cooked)', p: 4.4, c: 21, f: 1.9, cal: 120 },
-  tuna: { name: 'Tuna (canned)', p: 26, c: 0, f: 1, cal: 116 },
-  cheese: { name: 'Cottage Cheese', p: 11, c: 3.4, f: 4.3, cal: 98 },
-  cod: { name: 'Cod Fillet', p: 18, c: 0, f: 0.7, cal: 82 },
-  spinach: { name: 'Spinach', p: 2.9, c: 3.6, f: 0.4, cal: 23 },
-  tomato: { name: 'Tomato', p: 0.9, c: 3.9, f: 0.2, cal: 18 },
-  beans: { name: 'Black Beans (cooked)', p: 9, c: 24, f: 0.5, cal: 132 },
-  shrimp: { name: 'Shrimp', p: 24, c: 0, f: 0.3, cal: 99 },
-  beef: { name: 'Lean Beef', p: 26, c: 0, f: 15, cal: 250 },
-};
-
-// Meal templates: base portions in grams (these get scaled to match user targets)
-const mealTemplates = {
-  'weight gain': [
-    {
-      name: 'Breakfast', time: '7:00 AM',
-      items: [
-        { key: 'oats', baseG: 80 },
-        { key: 'milk', baseG: 250 },
-        { key: 'banana', baseG: 120 },
-        { key: 'peanut', baseG: 32 },
-      ],
-    },
-    {
-      name: 'Mid-Morning Snack', time: '10:00 AM',
-      items: [
-        { key: 'yogurt', baseG: 200 },
-        { key: 'almonds', baseG: 30 },
-        { key: 'shake', baseG: 30 },
-      ],
-    },
-    {
-      name: 'Lunch', time: '1:00 PM',
-      items: [
-        { key: 'chicken', baseG: 200 },
-        { key: 'rice', baseG: 150 },
-        { key: 'broccoli', baseG: 100 },
-        { key: 'oil', baseG: 10 },
-      ],
-    },
-    {
-      name: 'Pre-Workout', time: '4:00 PM',
-      items: [
-        { key: 'bread', baseG: 60 },
-        { key: 'turkey', baseG: 100 },
-        { key: 'avocado', baseG: 80 },
-      ],
-    },
-    {
-      name: 'Dinner', time: '8:00 PM',
-      items: [
-        { key: 'salmon', baseG: 200 },
-        { key: 'potato', baseG: 200 },
-        { key: 'quinoa', baseG: 100 },
-        { key: 'oil', baseG: 10 },
-      ],
-    },
-    {
-      name: 'Before Bed', time: '10:00 PM',
-      items: [
-        { key: 'cheese', baseG: 150 },
-        { key: 'shake', baseG: 30 },
-        { key: 'almonds', baseG: 15 },
-      ],
-    },
-  ],
-  'weight loss': [
-    {
-      name: 'Breakfast', time: '7:00 AM',
-      items: [
-        { key: 'egg', baseG: 150 },
-        { key: 'spinach', baseG: 50 },
-        { key: 'bread', baseG: 30 },
-      ],
-    },
-    {
-      name: 'Mid-Morning Snack', time: '10:00 AM',
-      items: [
-        { key: 'yogurt', baseG: 150 },
-        { key: 'banana', baseG: 50 },
-      ],
-    },
-    {
-      name: 'Lunch', time: '1:00 PM',
-      items: [
-        { key: 'chicken', baseG: 150 },
-        { key: 'broccoli', baseG: 150 },
-        { key: 'oil', baseG: 5 },
-        { key: 'tomato', baseG: 50 },
-      ],
-    },
-    {
-      name: 'Afternoon Snack', time: '4:00 PM',
-      items: [
-        { key: 'shake', baseG: 30 },
-        { key: 'banana', baseG: 50 },
-      ],
-    },
-    {
-      name: 'Dinner', time: '7:30 PM',
-      items: [
-        { key: 'cod', baseG: 180 },
-        { key: 'spinach', baseG: 100 },
-        { key: 'oil', baseG: 5 },
-      ],
-    },
-    {
-      name: 'Evening Snack', time: '9:00 PM',
-      items: [
-        { key: 'cheese', baseG: 100 },
-        { key: 'tomato', baseG: 50 },
-      ],
-    },
-  ],
-  'fat loss': [
-    {
-      name: 'Breakfast', time: '7:00 AM',
-      items: [
-        { key: 'egg', baseG: 150 },
-        { key: 'avocado', baseG: 80 },
-      ],
-    },
-    {
-      name: 'Mid-Morning Snack', time: '10:00 AM',
-      items: [
-        { key: 'cheese', baseG: 100 },
-        { key: 'almonds', baseG: 15 },
-      ],
-    },
-    {
-      name: 'Lunch', time: '1:00 PM',
-      items: [
-        { key: 'turkey', baseG: 180 },
-        { key: 'broccoli', baseG: 150 },
-        { key: 'oil', baseG: 8 },
-      ],
-    },
-    {
-      name: 'Pre-Workout', time: '4:00 PM',
-      items: [
-        { key: 'chicken', baseG: 100 },
-        { key: 'bread', baseG: 30 },
-      ],
-    },
-    {
-      name: 'Dinner', time: '7:30 PM',
-      items: [
-        { key: 'beef', baseG: 150 },
-        { key: 'broccoli', baseG: 150 },
-        { key: 'oil', baseG: 8 },
-      ],
-    },
-    {
-      name: 'Before Bed', time: '9:30 PM',
-      items: [
-        { key: 'shake', baseG: 30 },
-        { key: 'almonds', baseG: 10 },
-      ],
-    },
-  ],
-  'lean body': [
-    {
-      name: 'Breakfast', time: '7:00 AM',
-      items: [
-        { key: 'oats', baseG: 60 },
-        { key: 'shake', baseG: 15 },
-        { key: 'egg', baseG: 100 },
-        { key: 'banana', baseG: 50 },
-      ],
-    },
-    {
-      name: 'Mid-Morning Snack', time: '10:00 AM',
-      items: [
-        { key: 'yogurt', baseG: 150 },
-        { key: 'almonds', baseG: 20 },
-      ],
-    },
-    {
-      name: 'Lunch', time: '1:00 PM',
-      items: [
-        { key: 'chicken', baseG: 150 },
-        { key: 'quinoa', baseG: 100 },
-        { key: 'broccoli', baseG: 100 },
-        { key: 'oil', baseG: 8 },
-      ],
-    },
-    {
-      name: 'Pre-Workout', time: '4:00 PM',
-      items: [
-        { key: 'bread', baseG: 50 },
-        { key: 'turkey', baseG: 80 },
-        { key: 'banana', baseG: 50 },
-      ],
-    },
-    {
-      name: 'Dinner', time: '7:30 PM',
-      items: [
-        { key: 'salmon', baseG: 150 },
-        { key: 'potato', baseG: 150 },
-        { key: 'avocado', baseG: 50 },
-      ],
-    },
-    {
-      name: 'Evening Snack', time: '9:00 PM',
-      items: [
-        { key: 'cheese', baseG: 100 },
-        { key: 'tomato', baseG: 50 },
-      ],
-    },
-  ],
-};
-
-export default function MealPlannerPage() {
-  const [data, setData] = useState({});
-  const [meals, setMeals] = useState([]);
-  const [totals, setTotals] = useState({ cal: 0, p: 0, c: 0, f: 0 });
-  const [targets, setTargets] = useState({ cal: 0, p: 0, c: 0, f: 0 });
-
+  // Load user data from localStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return;
-
-    const parsed = JSON.parse(saved);
-    setData(parsed);
-
-    // Read targets from dashboard calculations
-    const userTargets = {
-      cal: parsed.caloriesTarget || 2500,
-      p: parsed.proteinTarget || 150,
-      c: parsed.carbsTarget || 250,
-      f: parsed.fatsTarget || 80,
-    };
-    setTargets(userTargets);
-
-    // Pick template based on goal
-    const userGoal = parsed.goal?.toLowerCase() || 'lean body';
-    const template = mealTemplates[userGoal] || mealTemplates['lean body'];
-
-    // Calculate base totals from template
-    let baseCal = 0;
-    template.forEach((meal) => {
-      meal.items.forEach((item) => {
-        const food = foodDB[item.key];
-        baseCal += (food.cal * item.baseG) / 100;
-      });
-    });
-
-    // Scale ratio based on calories (this scales all portions proportionally)
-    const ratio = userTargets.cal / baseCal;
-
-    // Build scaled meals
-    let tCal = 0, tP = 0, tC = 0, tF = 0;
-    const scaled = template.map((meal) => {
-      const mealItems = meal.items.map((item) => {
-        const food = foodDB[item.key];
-        const actualG = Math.round(item.baseG * ratio);
-        const cal = Math.round((food.cal * actualG) / 100);
-        const p = Math.round((food.p * actualG) / 100);
-        const c = Math.round((food.c * actualG) / 100);
-        const f = Math.round((food.f * actualG) / 100);
-
-        tCal += cal;
-        tP += p;
-        tC += c;
-        tF += f;
-
-        return {
-          name: food.name,
-          portion: `${actualG}g`,
-          cal,
-          p,
-          c,
-          f,
-        };
-      });
-
-      return {
-        name: meal.name,
-        time: meal.time,
-        items: mealItems,
-      };
-    });
-
-    setMeals(scaled);
-    setTotals({ cal: tCal, p: tP, c: tC, f: tF });
+    try {
+      const saved = localStorage.getItem('userform');
+      if (saved) {
+        const data = JSON.parse(saved);
+        setUserData({
+          name: data.name || 'User',
+          allergens: data.allergens || [],
+          diseases: data.diseases || '',
+          hasDisease: data.hasDisease || 'no',
+          goal: data.goal || 'maintain weight',
+          caloriesTarget: data.caloriesTarget || 2000,
+          proteinTarget: data.proteinTarget || 50,
+          carbsTarget: data.carbsTarget || 250,
+          fatsTarget: data.fatsTarget || 65,
+          activity: data.activity || 'moderate',
+          weight: data.weight || 0,
+          height: data.height || 0,
+          age: data.age || 0
+        });
+      }
+    } catch (e) {
+      console.error('Failed to load user data:', e);
+    }
   }, []);
 
-  if (!meals.length) {
+  // Generate meal plan
+  const generatePlan = async () => {
+    if (!userData) return;
+
+    setIsLoading(true);
+    setError('');
+    setMealPlan(null);
+
+    try {
+      const response = await fetch('/api/mealplan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to generate plan');
+      }
+
+      const data = await response.json();
+      setMealPlan(data);
+      setActiveDay(0);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // No data state
+  if (!userData) {
     return (
-      <div className="mp-page">
-        <h2 className="mp-logo">BRAND NAME</h2>
-        <p className="mp-loading">Loading your meal plan...</p>
-        <Link href="/main" className="mp-back">Go to Dashboard</Link>
+      <div className="planner-container">
+        <div className="planner-card">
+          <h1 className="planner-title">Meal Planner</h1>
+          <div className="no-data-box">
+            <p>Please complete your profile first.</p>
+            <a href="/userform" className="link-button">Go to Profile</a>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <>
-      <Head>
-        <title>Meal Planner - track my fitness</title>
-      </Head>
-      <div className="mp-page">
-        <nav className="mp-nav">
-          <span className="mp-logo">track my fitness</span>
-          <Link href="/dashboard" className="mp-nav-link">Back to Dashboard</Link>
-        </nav>
+    <div className="planner-container">
+      <div className="planner-card">
+        <h1 className="planner-title">Meal Planner</h1>
+        <p className="planner-subtitle">Personalized for {userData.name}</p>
 
-        <header className="mp-header">
-          <h1 className="mp-title">Your Meal Plan</h1>
-          <p className="mp-sub">Portions calculated for your exact macros</p>
-          <span className="mp-goal-badge">Goal: {data.goal || 'lean body'}</span>
-        </header>
+        {/* User Profile Summary */}
+        <div className="profile-summary">
+          <h3 className="summary-title">Your Health Profile</h3>
+          
+          {/* Goal & Targets */}
+          <div className="stats-grid">
+            <div className="stat-item">
+              <span className="stat-label">Goal</span>
+              <span className="stat-value">{userData.goal}</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Daily Calories</span>
+              <span className="stat-value">{userData.caloriesTarget} kcal</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Protein</span>
+              <span className="stat-value">{userData.proteinTarget}g</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Carbs</span>
+              <span className="stat-value">{userData.carbsTarget}g</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Fats</span>
+              <span className="stat-value">{userData.fatsTarget}g</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Activity</span>
+              <span className="stat-value">{userData.activity}</span>
+            </div>
+          </div>
 
-        {/* Targets vs Actual */}
-        <section className="mp-totals">
-          <div className="mp-total-card target">
-            <span className="mp-total-label">Target Calories</span>
-            <span className="mp-total-num">{targets.cal}</span>
+          {/* Allergens */}
+          <div className="summary-section">
+            <span className="summary-label">⚠️ Allergens to Avoid:</span>
+            <div className="tag-list">
+              {userData.allergens.length > 0 ? (
+                userData.allergens.map((item: string, i: number) => (
+                  <span key={i} className="tag tag-allergen">{item}</span>
+                ))
+              ) : (
+                <span className="tag tag-none">None</span>
+              )}
+            </div>
           </div>
-          <div className="mp-total-card target">
-            <span className="mp-total-label">Target Protein</span>
-            <span className="mp-total-num">{targets.p}g</span>
-          </div>
-          <div className="mp-total-card target">
-            <span className="mp-total-label">Target Carbs</span>
-            <span className="mp-total-num">{targets.c}g</span>
-          </div>
-          <div className="mp-total-card target">
-            <span className="mp-total-label">Target Fats</span>
-            <span className="mp-total-num">{targets.f}g</span>
-          </div>
-        </section>
 
-        <section className="mp-totals actual">
-          <div className="mp-total-card">
-            <span className="mp-total-label">Plan Calories</span>
-            <span className="mp-total-num">{totals.cal}</span>
-          </div>
-          <div className="mp-total-card">
-            <span className="mp-total-label">Plan Protein</span>
-            <span className="mp-total-num">{totals.p}g</span>
-          </div>
-          <div className="mp-total-card">
-            <span className="mp-total-label">Plan Carbs</span>
-            <span className="mp-total-num">{totals.c}g</span>
-          </div>
-          <div className="mp-total-card">
-            <span className="mp-total-label">Plan Fats</span>
-            <span className="mp-total-num">{totals.f}g</span>
-          </div>
-        </section>
-
-        <main className="mp-main">
-          {meals.map((meal, mIndex) => (
-            <div
-              key={meal.name}
-              className="mp-meal"
-              style={{ animationDelay: `${mIndex * 100}ms` }}
-            >
-              <div className="mp-meal-header">
-                <h2>{meal.name}</h2>
-                <span>{meal.time}</span>
+          {/* Health Conditions */}
+          {userData.hasDisease === 'yes' && userData.diseases && (
+            <div className="summary-section">
+              <span className="summary-label">🏥 Health Conditions:</span>
+              <div className="tag-list">
+                <span className="tag tag-health">{userData.diseases}</span>
               </div>
-              <div className="mp-meal-items">
-                {meal.items.map((item, i) => (
-                  <div key={i} className="mp-item">
-                    <div className="mp-item-info">
-                      <span className="mp-item-name">{item.name}</span>
-                      <span className="mp-item-portion">{item.portion}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Generate Button */}
+        <button 
+          onClick={generatePlan}
+          disabled={isLoading}
+          className="generate-button"
+        >
+          {isLoading ? '⏳ Generating your meal plan...' : 'Generate 7-Day Meal Plan'}
+        </button>
+
+        {/* Error */}
+        {error && <div className="error-box">⚠️ {error}</div>}
+
+        {/* Meal Plan Display */}
+        {mealPlan && (
+          <div className="meal-plan-display">
+            
+            {/* Day Tabs */}
+            <div className="day-tabs">
+              {mealPlan.days?.map((day: any, index: number) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveDay(index)}
+                  className={activeDay === index ? 'day-tab active' : 'day-tab'}
+                >
+                  {day.day?.substring(0, 3)}
+                </button>
+              ))}
+            </div>
+
+            {/* Active Day */}
+            <div className="day-content">
+              <div className="day-header">
+                <h2 className="day-title">{mealPlan.days[activeDay]?.day}</h2>
+                <span className="day-calories">
+                  {mealPlan.days[activeDay]?.totalCalories} kcal total
+                </span>
+              </div>
+              
+              <div className="meals-list">
+                {mealPlan.days[activeDay]?.meals?.map((meal: any, idx: number) => (
+                  <div key={idx} className="meal-item">
+                    <div className="meal-header">
+                      <span className="meal-type">{meal.type}</span>
+                      <span className="meal-calories">{meal.calories} kcal</span>
                     </div>
-                    <div className="mp-item-macros">
-                      <span className="mp-macro cal">{item.cal}</span>
-                      <span className="mp-macro p">{item.p}P</span>
-                      <span className="mp-macro c">{item.c}C</span>
-                      <span className="mp-macro f">{item.f}F</span>
+                    <h4 className="meal-name">{meal.name}</h4>
+                    <p className="meal-desc">{meal.description}</p>
+                    
+                    <div className="meal-macros">
+                      <span className="macro-pill">P: {meal.protein}g</span>
+                      <span className="macro-pill">C: {meal.carbs}g</span>
+                      <span className="macro-pill">F: {meal.fat}g</span>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          ))}
-        </main>
+
+            {/* Tips */}
+            {mealPlan.tips && mealPlan.tips.length > 0 && (
+              <div className="tips-section">
+                <h3 className="section-title">💡 Tips for Your Goal</h3>
+                <ul className="tips-list">
+                  {mealPlan.tips.map((tip: string, i: number) => (
+                    <li key={i}>{tip}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Warnings */}
+            {mealPlan.warnings && mealPlan.warnings.length > 0 && (
+              <div className="warnings-section">
+                <h3 className="section-title">⚠️ Important</h3>
+                <ul className="warnings-list">
+                  {mealPlan.warnings.map((warning: string, i: number) => (
+                    <li key={i}>{warning}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <button 
+              onClick={generatePlan}
+              disabled={isLoading}
+              className="regenerate-button"
+            >
+              🔄 Generate New Plan
+            </button>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }

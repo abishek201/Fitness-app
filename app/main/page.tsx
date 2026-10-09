@@ -17,6 +17,9 @@ export default function DashboardPage() {
   }, []);
 
   const BMR = 10 * data.weight + 6.25 * data.height - 5 * data.age + 5;
+  const BMI = data.weight / ((data.height / 100) * (data.height / 100));
+  const fatpercentage = Math.round(1.20 * BMI) + Math.round(0.23 * data.age) - 16.2;
+
   let dailyCal = 0;
   if (data.activity === "weekly 2 - 3 times") {
     dailyCal = Math.round(BMR * 1.375);
@@ -53,8 +56,8 @@ export default function DashboardPage() {
     const formData = existing ? JSON.parse(existing) : {};
     formData.caloriesTarget = Math.round(dailyCal);
 
-    formData.caloriesTarget = Math.round(dailyCal); 
-    formData.proteinTarget = protien; 
+    formData.caloriesTarget = Math.round(dailyCal);
+    formData.proteinTarget = protien;
     formData.carbsTarget = carbs;
     formData.fatsTarget = fats;
     localStorage.setItem("userform", JSON.stringify(formData));
@@ -97,7 +100,7 @@ export default function DashboardPage() {
               </div>
               <div className="detail-row">
                 <span>body fat %</span>
-                <strong>{data.fat}</strong>
+                <strong>{fatpercentage}</strong>
               </div>
             </div>
           </section>

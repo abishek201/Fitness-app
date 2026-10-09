@@ -1,318 +1,402 @@
-/* styles/meal-planner.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-
-.mp-page {
+/* ===== Container ===== */
+.planner-container {
   min-height: 100vh;
-  background: #f5f5f4;
-  font-family: 'Inter', sans-serif;
+  background-color: #F9F7F2;
+  padding: 40px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #059669;
+  cursor: default;
 }
 
-.mp-nav {
+.planner-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e0d8;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 2px 12px rgba(5, 150, 105, 0.08);
+}
+
+/* ===== Header ===== */
+.planner-title {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 8px 0;
+  color: #059669;
+}
+
+.planner-subtitle {
+  font-size: 15px;
+  text-align: center;
+  margin: 0 0 30px 0;
+  color: #6b7280;
+}
+
+/* ===== Profile Summary ===== */
+.profile-summary {
+  background-color: #F9F7F2;
+  border: 1px solid #e5e0d8;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.summary-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #059669;
+  margin: 0 0 16px 0;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-item {
+  background-color: #ffffff;
+  border: 1px solid #e5e0d8;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #059669;
+}
+
+/* Tags */
+.summary-section {
+  margin-top: 12px;
+}
+
+.summary-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tag-allergen {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.tag-health {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.tag-none {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+/* ===== Buttons ===== */
+.generate-button {
+  width: 100%;
+  background-color: #059669;
+  color: #ffffff;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.generate-button:hover:not(:disabled) {
+  background-color: #047857;
+}
+
+.generate-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.regenerate-button {
+  width: 100%;
+  background-color: #ffffff;
+  color: #059669;
+  border: 1px solid #059669;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 24px;
+}
+
+.regenerate-button:hover:not(:disabled) {
+  background-color: #ecfdf5;
+}
+
+.link-button {
+  display: inline-block;
+  background-color: #059669;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+/* ===== Error & No Data ===== */
+.error-box {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.no-data-box {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+/* ===== Meal Plan ===== */
+.meal-plan-display {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Day Tabs */
+.day-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e5e0d8;
+}
+
+.day-tab {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #6b7280;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.day-tab:hover {
+  border-color: #059669;
+  color: #059669;
+}
+
+.day-tab.active {
+  background-color: #059669;
+  color: #ffffff;
+  border-color: #059669;
+}
+
+/* Day Content */
+.day-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.mp-logo {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #10b981;
-  letter-spacing: 1px;
-}
-
-.mp-nav-link {
-  color: #4b5563;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.mp-nav-link:hover {
-  color: #10b981;
-}
-
-.mp-loading {
-  text-align: center;
-  padding: 4rem;
-  color: #6b7280;
-}
-
-.mp-back {
-  display: block;
-  width: fit-content;
-  margin: 0 auto;
-  padding: 0.8rem 2rem;
-  background: #10b981;
-  color: white;
-  text-decoration: none;
-  border-radius: 50px;
-  font-weight: 600;
-}
-
-.mp-back:hover {
-  background: #059669;
-}
-
-.mp-header {
-  text-align: center;
-  padding: 3rem 2rem 1.5rem;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.mp-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #1a1a2e;
-  margin-bottom: 0.4rem;
-}
-
-.mp-sub {
-  color: #6b7280;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-.mp-goal-badge {
-  display: inline-block;
-  padding: 0.4rem 1.2rem;
-  background: #ecfdf5;
+.day-title {
+  font-size: 22px;
+  font-weight: 700;
   color: #059669;
-  border-radius: 50px;
-  font-size: 0.85rem;
+  margin: 0;
+}
+
+.day-calories {
+  font-size: 14px;
   font-weight: 600;
-  text-transform: capitalize;
+  color: #059669;
+  background-color: #ecfdf5;
+  padding: 6px 14px;
+  border-radius: 20px;
 }
 
-.mp-totals {
-  max-width: 800px;
-  margin: 0 auto 2rem;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+/* Meals */
+.meals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.mp-total-card {
-  background: white;
-  border-radius: 14px;
-  padding: 1.2rem;
-  text-align: center;
-  border: 1px solid #e5e7eb;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+.meal-item {
+  background-color: #F9F7F2;
+  border: 1px solid #e5e0d8;
+  border-radius: 12px;
+  padding: 16px 20px;
 }
 
-.mp-total-card:hover {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  transform: translateY(-3px);
+.meal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-.mp-total-num {
-  display: block;
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #1a1a2e;
-  margin-bottom: 0.2rem;
-}
-
-.mp-total-label {
-  font-size: 0.8rem;
-  color: #6b7280;
+.meal-type {
+  font-size: 12px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #6b7280;
 }
 
-.mp-main {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 2rem 4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+.meal-calories {
+  font-size: 13px;
+  font-weight: 600;
+  color: #059669;
+  background-color: #ecfdf5;
+  padding: 4px 10px;
+  border-radius: 12px;
 }
 
-.mp-meal {
-  background: white;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.5s ease-out forwards;
-  transition: box-shadow 0.3s ease;
-}
-
-.mp-meal:hover {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-}
-
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.mp-meal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  background: #fafaf9;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.mp-meal-header h2 {
-  font-size: 1rem;
+.meal-name {
+  font-size: 17px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1f2937;
+  margin: 0 0 6px 0;
 }
 
-.mp-meal-header span {
-  font-size: 0.8rem;
-  color: #9ca3af;
-  font-weight: 500;
+.meal-desc {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
 }
 
-.mp-meal-items {
-  padding: 0.5rem 1.5rem;
-}
-
-.mp-item {
+.meal-macros {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid #f3f4f6;
-  transition: background 0.2s ease;
+  gap: 8px;
 }
 
-.mp-item:last-child {
-  border-bottom: none;
-}
-
-.mp-item:hover {
-  background: #fafaf9;
-  margin: 0 -1.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-.mp-item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.mp-item-name {
-  font-size: 0.95rem;
+.macro-pill {
+  font-size: 12px;
   font-weight: 600;
-  color: #374151;
-}
-
-.mp-item-portion {
-  font-size: 0.8rem;
-  color: #9ca3af;
-}
-
-.mp-item-macros {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.mp-macro {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-}
-
-.mp-macro.cal {
-  background: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
   color: #4b5563;
 }
 
-.mp-macro.p {
-  background: #ecfdf5;
+/* Tips & Warnings */
+.tips-section,
+.warnings-section {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.tips-section {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.warnings-section {
+  background-color: #fff7ed;
+  border: 1px solid #fed7aa;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+.tips-section .section-title {
   color: #059669;
 }
 
-.mp-macro.c {
-  background: #fffbeb;
-  color: #b45309;
+.warnings-section .section-title {
+  color: #c2410c;
 }
 
-.mp-macro.f {
-  background: #fef2f2;
-  color: #b91c1c;
+.tips-list,
+.warnings-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.8;
 }
 
+.tips-list li {
+  color: #065f46;
+}
+
+.warnings-list li {
+  color: #9a3412;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 640px) {
-  .mp-totals {
+  .planner-card {
+    padding: 20px;
+  }
+
+  .stats-grid {
     grid-template-columns: repeat(2, 1fr);
-    padding: 0 1rem;
   }
 
-  .mp-main {
-    padding: 0 1rem 3rem;
+  .day-tabs {
+    gap: 6px;
   }
 
-  .mp-nav {
-    flex-direction: column;
-    gap: 0.6rem;
+  .day-tab {
+    padding: 8px 12px;
+    font-size: 13px;
   }
-
-  .mp-header {
-    padding: 2rem 1rem 1rem;
-  }
-
-  .mp-title {
-    font-size: 1.5rem;
-  }
-
-  .mp-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .mp-item:hover {
-    margin: 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-/* Add to styles/meal-planner.css */
-
-.mp-totals.actual {
-  margin-top: 0.5rem;
-}
-
-.mp-totals.actual .mp-total-card {
-  background: #ecfdf5;
-  border-color: #10b981;
-}
-
-.mp-totals.actual .mp-total-num {
-  color: #059669;
-}
-
-.mp-total-card.target {
-  background: #f0f9ff;
-  border-color: #0ea5e9;
-}
-
-.mp-total-card.target .mp-total-num {
-  color: #0284c7;
-}
-
-.mp-item-macros .mp-macro.cal {
-  background: #f3f4f6;
-  color: #374151;
-  min-width: 44px;
-  text-align: center;
 }
