@@ -1,12 +1,29 @@
 "use client"; 
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import './landing.css';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function LandingPage() {
   const observerRef = useRef(null);
+  const [name , setName] = useState<boolean>(false);
+  
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const saved = localStorage.getItem('userform');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if( parsed.name !== null && parsed.name !== undefined && parsed.name !== ""){
+        setName(true);
+      }else{
+        setName(false);
+      }
+    }
+  },[]);
+         
 
+ 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -44,7 +61,9 @@ export default function LandingPage() {
             <li><a href="#reviews">Reviews</a></li>
             
           </ul>
-          <Link href="/login"><button className="nav-cta">START FOR FREE</button></Link>
+          <Link href={name ? '/main' : '/login'}>
+            <button className="nav-cta">START FOR FREE</button>
+          </Link>
         </div>
       </nav>
 
@@ -60,7 +79,9 @@ export default function LandingPage() {
           <p className="hero-subtitle">
             JOIN THE COMMUNITY OF FITNESS JOURNEY AND REACH YOUR GOAL FASTER
           </p>
-          <Link href="/login"><button className="hero-cta">START FOR FREE</button></Link>
+          <Link href={name ? '/main' : '/login'}>
+            <button className="hero-cta">START FOR FREE</button>
+          </Link>
         </div>
         <div className="hero-decoration">
           <div className="circle circle-1"></div>
@@ -128,7 +149,9 @@ export default function LandingPage() {
       {/* CTA Banner */}
       <section className="cta-banner scroll-animate">
         <h2>Nutrition tracking for real life.</h2>
-        <Link href="/login"><button className="cta-banner-btn">START FOR FREE</button></Link>
+        <Link href={name ? '/main' : '/login'}>
+          <button className="cta-banner-btn">START FOR FREE</button>
+        </Link>
       </section>
 
       {/* Footer */}

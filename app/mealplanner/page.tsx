@@ -21,21 +21,22 @@ export default function MealPlanner() {
           allergens: data.allergens || [],
           diseases: data.diseases || '',
           hasDisease: data.hasDisease || 'no',
-          goal: data.goal || 'maintain weight',
-          caloriesTarget: data.caloriesTarget || 2000,
-          proteinTarget: data.proteinTarget || 50,
-          carbsTarget: data.carbsTarget || 250,
-          fatsTarget: data.fatsTarget || 65,
-          activity: data.activity || 'moderate',
-          weight: data.weight || 0,
-          height: data.height || 0,
-          age: data.age || 0
+          goal: data.goal  || 'null',
+          caloriesTarget: data.caloriesTarget || 0,
+          proteinTarget: data.proteinTarget || 0,
+          carbsTarget: data.carbsTarget || 0,
+          fatsTarget: data.fatsTarget || 0,
+          activity: data.activity|| 'No physical activity',
+          weight: data.weight || "-" ,
+          height: data.height || "-" ,
+          age: data.age || "-"
         });
       }
     } catch (e) {
       console.error('Failed to load user data:', e);
     }
   }, []);
+  const dataa = userData;
 
   // Generate meal plan
   const generatePlan = async () => {
@@ -65,6 +66,14 @@ export default function MealPlanner() {
     } finally {
       setIsLoading(false);
     }
+    const [dataa, setDataa] = useState(null);
+
+useEffect(() => {
+  const saved = localStorage.getItem('userform');
+  if (saved) setDataa(JSON.parse(saved));
+}, []);
+
+
   };
 
   // No data state
@@ -75,7 +84,7 @@ export default function MealPlanner() {
           <h1 className="planner-title">Meal Planner</h1>
           <div className="no-data-box">
             <p>Please complete your profile first.</p>
-            <a href="/userform" className="link-button">Go to Profile</a>
+            <a href="/goal" className="link-button">Go to Profile</a>
           </div>
         </div>
       </div>

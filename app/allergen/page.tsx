@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import "./allrgen.css";
 
-const allergens = ["Eggs", "Gluten", "Chicken", "Dairy", "Soy"];
+const allergens = ["Eggs", "Gluten", "Chicken & meat", "Dairy", "Soy","Nuts"];
 
 export default function AllergenMenu() {
   // Load saved selections from localStorage on first render (or start empty)
@@ -43,7 +43,7 @@ const toggleItem = (item) => {
   return (
     <div className="page">
       <div className="card">
-        <h1 className="brand">track my fitness</h1>
+        <h1 className="brand">Track my fitness</h1>
         <h2 className="subtitle">Allergens</h2>
 
         <div className="grid">

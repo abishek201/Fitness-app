@@ -51,7 +51,7 @@ export default function AgePage() {
             max="120"
           />
         </div>
-        <Link href="/fat" className="age-submit">submit</Link>
+        <Link href="/height" className="age-submit">submit</Link>
       </div>
     </>
   );

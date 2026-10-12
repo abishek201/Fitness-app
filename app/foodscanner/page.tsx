@@ -81,18 +81,16 @@ export default function FoodScanner() {
 
   return (
     <>
-      <nav className="mp-nav">
-        <span className="mp-logo">Track my fitness</span>
-        <Link href="/main" className="mp-nav-link">
-          Back to Dashboard
-        </Link>
-      </nav>
+       <nav className="ex-nav">
+          <span className="ex-logo">Track my fitness</span>
+          <Link href="/main" className="ex-nav-link">Back to Dashboard</Link>
+        </nav>
 
       <div className="scanner-container">
         <div className="scanner-card">
-          <h1 className="scanner-title">🥗 AI Food Scanner</h1>
+          <h1 className="scanner-title">Food Scanner</h1>
           <p className="scanner-subtitle">
-            Upload a photo of your meal to get instant nutrition facts
+            Upload a photo of your meal to get instant nutrition facts and macros
           </p>
 
           {/* Upload area */}

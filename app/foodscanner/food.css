@@ -1,5 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
 .scanner-container {
   min-height: 100vh;
   background-color: #F9F7F2;
@@ -30,6 +31,33 @@
   text-align: center;
   margin: 0 0 6px 0;
   color: #059669;
+}
+.ex-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  font-family: 'Inter', sans-serif;
+}
+
+.ex-logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: 1px;
+}
+.ex-nav-link:hover {
+  color: #10b981;
+}
+
+.ex-nav-link {
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .scanner-subtitle {

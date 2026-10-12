@@ -92,7 +92,7 @@
 }
 
 .login-input {
-  width: 100%;
+  width: 80%;
   padding: 0.85rem 1rem;
   border: 1.5px solid #e5e7eb;
   border-radius: 12px;
@@ -125,4 +125,11 @@
 
 .email-btn:hover {
   background: #059669;
+}
+/* Error message for validation */
+.login-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin: -0.5rem 0 1rem 0;
+  text-align: left;
 }

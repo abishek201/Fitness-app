@@ -70,12 +70,12 @@ export default function FatsFoodsPage() {
   return (
     <>
       <Head>
-        <title>Fat Rich Foods - Brand Name</title>
+        <title>Fat Rich Foods - TRACK MY FITNESS</title>
       </Head>
       <div className="fat-page">
         <nav className="fat-nav">
-          <span className="fat-logo">BRAND NAME</span>
-          <Link href="/dashboard" className="fat-nav-link">Back to Dashboard</Link>
+          <span className="fat-logo">TRACK MY FITNESS</span>
+          <Link href="/main" className="fat-nav-link">Back to Dashboard</Link>
         </nav>
 
         <header className="fat-header">

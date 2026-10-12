@@ -15,6 +15,7 @@ export default function DashboardPage() {
       }
     }
   }, []);
+  
 
   const BMR = 10 * data.weight + 6.25 * data.height - 5 * data.age + 5;
   const BMI = data.weight / ((data.height / 100) * (data.height / 100));
@@ -63,6 +64,39 @@ export default function DashboardPage() {
     localStorage.setItem("userform", JSON.stringify(formData));
   }, [protien, carbs, fats, dailyCal]);
 
+ useEffect(() => {
+    const saved = localStorage.getItem("userform");
+    if (saved) {
+      const userdata = JSON.parse(saved);
+      if (userdata !== undefined) {
+        setdata(userdata);
+
+        // Check if email exists
+        if (userdata.email) {
+          const lastSyncedEmail = localStorage.getItem("lastSyncedEmail");
+
+          // Only save to MongoDB if the email has changed or hasn't been synced yet
+          if (userdata.email !== lastSyncedEmail) {
+            fetch("/api/user", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userdata),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log("Database sync successful:", data);
+                // Remember this email so it doesn't trigger again on future reloads
+                localStorage.setItem("lastSyncedEmail", userdata.email);
+              })
+              .catch((err) => console.error("Database sync failed:", err));
+          }
+        }
+      }
+    }
+  }, []); 
+
   return (
     <>
       <Head>
@@ -91,16 +125,16 @@ export default function DashboardPage() {
                 <strong>{data.age}</strong>
               </div>
               <div className="detail-row">
-                <span>height</span>
+                <span>height in Cms</span>
                 <strong>{data.height}</strong>
               </div>
               <div className="detail-row">
-                <span>weight</span>
+                <span>weight in kg</span>
                 <strong>{data.weight}</strong>
               </div>
               <div className="detail-row">
-                <span>body fat %</span>
-                <strong>{fatpercentage}</strong>
+                <span>allergies from </span>
+                <strong>{data.allergies || "None"}</strong>
               </div>
             </div>
           </section>
@@ -195,7 +229,7 @@ export default function DashboardPage() {
             </div>
           </section>
 
-          <section className="dash-section">
+          {/* <section className="dash-section">
             <h2 className="dash-section-title">MUSCLE AND FAT RESULT</h2>
             <div className="dash-control">
               <div className="control-item up">
@@ -207,7 +241,7 @@ export default function DashboardPage() {
                 <strong>{fatmass.toFixed(1)} kg</strong>
               </div>
             </div>
-          </section>
+          </section> */}
         </main>
       </div>
     </>

@@ -68,12 +68,12 @@ export default function CarbsFoodsPage() {
   return (
     <>
       <Head>
-        <title>Carb Rich Foods - Brand Name</title>
+        <title>Carb Rich Foods - TRACK MY FITNESS</title>
       </Head>
       <div className="carb-page">
         <nav className="carb-nav">
-          <span className="carb-logo">BRAND NAME</span>
-          <Link href="/dashboard" className="carb-nav-link">Back to Dashboard</Link>
+          <span className="carb-logo">TRACK MY FITNESS</span>
+          <Link href="/main" className="carb-nav-link">Back to Dashboard</Link>
         </nav>
 
         <header className="carb-header">

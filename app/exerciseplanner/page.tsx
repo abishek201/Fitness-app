@@ -312,8 +312,12 @@ export default function ExercisePlannerPage() {
   if (!plan) {
     return (
       <div className="ex-page">
-        <h2 className="ex-logo">BRAND NAME</h2>
-        <p className="ex-loading">Loading your plan...</p>
+        {/* <h2 className="ex-logo">BRAND NAME</h2> */}
+        <nav className="ex-nav">
+          <span className="ex-logo">Track my fitness</span>
+          <Link href="/main" className="ex-nav-link">Back to Dashboard</Link>
+        </nav>
+        <p className="ex-loading">Please select a goal to view your exercise plan.....</p>
         <Link href="/goal" className="ex-back">Set Your Goal</Link>
       </div>
     );
