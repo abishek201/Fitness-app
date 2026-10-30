@@ -1,39 +1,39 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import './meal.css';
+import { useState, useEffect } from "react";
+import "./meal.css";
 
 export default function MealPlanner() {
   const [userData, setUserData] = useState<any>(null);
   const [mealPlan, setMealPlan] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [activeDay, setActiveDay] = useState(0);
 
   // Load user data from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('userform');
+      const saved = localStorage.getItem("userform");
       if (saved) {
         const data = JSON.parse(saved);
         setUserData({
-          name: data.name || 'User',
+          name: data.name || "User",
           allergens: data.allergens || [],
-          diseases: data.diseases || '',
-          hasDisease: data.hasDisease || 'no',
-          goal: data.goal  || 'null',
+          diseases: data.diseases || "",
+          hasDisease: data.hasDisease || "no",
+          goal: data.goal || "null",
           caloriesTarget: data.caloriesTarget || 0,
           proteinTarget: data.proteinTarget || 0,
           carbsTarget: data.carbsTarget || 0,
           fatsTarget: data.fatsTarget || 0,
-          activity: data.activity|| 'No physical activity',
-          weight: data.weight || "-" ,
-          height: data.height || "-" ,
-          age: data.age || "-"
+          activity: data.activity || "No physical activity",
+          weight: data.weight || "-",
+          height: data.height || "-",
+          age: data.age || "-",
         });
       }
     } catch (e) {
-      console.error('Failed to load user data:', e);
+      console.error("Failed to load user data:", e);
     }
   }, []);
   const dataa = userData;
@@ -43,19 +43,19 @@ export default function MealPlanner() {
     if (!userData) return;
 
     setIsLoading(true);
-    setError('');
+    setError("");
     setMealPlan(null);
 
     try {
-      const response = await fetch('/api/mealplan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/mealplan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.error || 'Failed to generate plan');
+        throw new Error(err.error || "Failed to generate plan");
       }
 
       const data = await response.json();
@@ -68,12 +68,10 @@ export default function MealPlanner() {
     }
     const [dataa, setDataa] = useState(null);
 
-useEffect(() => {
-  const saved = localStorage.getItem('userform');
-  if (saved) setDataa(JSON.parse(saved));
-}, []);
-
-
+    useEffect(() => {
+      const saved = localStorage.getItem("userform");
+      if (saved) setDataa(JSON.parse(saved));
+    }, []);
   };
 
   // No data state
@@ -84,7 +82,9 @@ useEffect(() => {
           <h1 className="planner-title">Meal Planner</h1>
           <div className="no-data-box">
             <p>Please complete your profile first.</p>
-            <a href="/goal" className="link-button">Go to Profile</a>
+            <a href="/goal" className="link-button">
+              Go to Profile
+            </a>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@ useEffect(() => {
         {/* User Profile Summary */}
         <div className="profile-summary">
           <h3 className="summary-title">Your Health Profile</h3>
-          
+
           {/* Goal & Targets */}
           <div className="stats-grid">
             <div className="stat-item">
@@ -135,7 +135,9 @@ useEffect(() => {
             <div className="tag-list">
               {userData.allergens.length > 0 ? (
                 userData.allergens.map((item: string, i: number) => (
-                  <span key={i} className="tag tag-allergen">{item}</span>
+                  <span key={i} className="tag tag-allergen">
+                    {item}
+                  </span>
                 ))
               ) : (
                 <span className="tag tag-none">None</span>
@@ -144,7 +146,7 @@ useEffect(() => {
           </div>
 
           {/* Health Conditions */}
-          {userData.hasDisease === 'yes' && userData.diseases && (
+          {userData.hasDisease === "yes" && userData.diseases && (
             <div className="summary-section">
               <span className="summary-label">🏥 Health Conditions:</span>
               <div className="tag-list">
@@ -155,12 +157,14 @@ useEffect(() => {
         </div>
 
         {/* Generate Button */}
-        <button 
+        <button
           onClick={generatePlan}
           disabled={isLoading}
           className="generate-button"
         >
-          {isLoading ? '⏳ Generating your meal plan...' : 'Generate 7-Day Meal Plan'}
+          {isLoading
+            ? "⏳ Generating your meal plan..."
+            : "Generate 7-Day Meal Plan"}
         </button>
 
         {/* Error */}
@@ -169,14 +173,13 @@ useEffect(() => {
         {/* Meal Plan Display */}
         {mealPlan && (
           <div className="meal-plan-display">
-            
             {/* Day Tabs */}
             <div className="day-tabs">
               {mealPlan.days?.map((day: any, index: number) => (
                 <button
                   key={index}
                   onClick={() => setActiveDay(index)}
-                  className={activeDay === index ? 'day-tab active' : 'day-tab'}
+                  className={activeDay === index ? "day-tab active" : "day-tab"}
                 >
                   {day.day?.substring(0, 3)}
                 </button>
@@ -191,24 +194,29 @@ useEffect(() => {
                   {mealPlan.days[activeDay]?.totalCalories} kcal total
                 </span>
               </div>
-              
+
               <div className="meals-list">
-                {mealPlan.days[activeDay]?.meals?.map((meal: any, idx: number) => (
-                  <div key={idx} className="meal-item">
-                    <div className="meal-header">
-                      <span className="meal-type">{meal.type}</span>
-                      <span className="meal-calories">{meal.calories} kcal</span>
+                {mealPlan.days[activeDay]?.meals?.map(
+                  (meal: any, idx: number) => (
+                    <div key={idx} className="meal-item">
+                      <div className="meal-header">
+                        <span className="meal-type">{meal.type}</span>
+                        <span className="meal-time">🕐 {meal.time}</span>
+                        <span className="meal-calories">
+                          {meal.calories} kcal
+                        </span>
+                      </div>
+                      <h4 className="meal-name">{meal.name}</h4>
+                      <p className="meal-desc">{meal.description}</p>
+
+                      <div className="meal-macros">
+                        <span className="macro-pill">P: {meal.protein}g</span>
+                        <span className="macro-pill">C: {meal.carbs}g</span>
+                        <span className="macro-pill">F: {meal.fat}g</span>
+                      </div>
                     </div>
-                    <h4 className="meal-name">{meal.name}</h4>
-                    <p className="meal-desc">{meal.description}</p>
-                    
-                    <div className="meal-macros">
-                      <span className="macro-pill">P: {meal.protein}g</span>
-                      <span className="macro-pill">C: {meal.carbs}g</span>
-                      <span className="macro-pill">F: {meal.fat}g</span>
-                    </div>
-                  </div>
-                ))}
+                  ),
+                )}
               </div>
             </div>
 
@@ -236,7 +244,7 @@ useEffect(() => {
               </div>
             )}
 
-            <button 
+            <button
               onClick={generatePlan}
               disabled={isLoading}
               className="regenerate-button"

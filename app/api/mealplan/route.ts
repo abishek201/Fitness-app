@@ -34,6 +34,7 @@ INSTRUCTIONS:
 4. Consider health condition: ${userData.diseases || 'None'}
 5. Target approximately ${userData.caloriesTarget || 2000} calories per day
 6. provide a meal plan which is daily available in the india and can be prepared at home.
+7. Add an appropriate consumption time for each meal in 12-hour format (e.g., "8:00 AM" for Breakfast, "1:00 PM" for Lunch, "8:00 PM" for Dinner, snacks in between)
 
 
 Return ONLY a JSON object with this exact structure:
@@ -45,6 +46,7 @@ Return ONLY a JSON object with this exact structure:
       "meals": [
         {
           "type": "Breakfast",
+          "time": "8:00 AM",
           "name": "Meal name",
           "description": "Brief description",
           "calories": 600,
