@@ -1,10 +1,10 @@
 "use client";
 import Head from "next/head";
 import "./main.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState  } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-
 
 export default function DashboardPage() {
   const [data, setdata] = useState({});
@@ -17,11 +17,18 @@ export default function DashboardPage() {
       }
     }
   }, []);
-  
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userform");
+
+    router.push("/");
+  };
 
   const BMR = 10 * data.weight + 6.25 * data.height - 5 * data.age + 5;
   const BMI = data.weight / ((data.height / 100) * (data.height / 100));
-  const fatpercentage = Math.round(1.20 * BMI) + Math.round(0.23 * data.age) - 16.2;
+  const fatpercentage =
+    Math.round(1.2 * BMI) + Math.round(0.23 * data.age) - 16.2;
 
   let dailyCal = 0;
   if (data.activity === "weekly 2 - 3 times") {
@@ -54,16 +61,15 @@ export default function DashboardPage() {
   const fatmass = data.weight * (data.fat / 100);
   const leanmuscle = data.weight - fatmass;
   let steps = 0;
-  if(data.goal === "weight gain"){
+  if (data.goal === "weight gain") {
     steps = 5000;
-  }else if(data.goal === "weight loss"){
+  } else if (data.goal === "weight loss") {
     steps = 10000;
-  }else if(data.goal === "lean body"){
+  } else if (data.goal === "lean body") {
     steps = 8000;
-  }else if(data.goal === "fat loss"){
+  } else if (data.goal === "fat loss") {
     steps = 12000;
   }
-
 
   useEffect(() => {
     const existing = localStorage.getItem("userform");
@@ -77,7 +83,7 @@ export default function DashboardPage() {
     localStorage.setItem("userform", JSON.stringify(formData));
   }, [protien, carbs, fats, dailyCal]);
 
- useEffect(() => {
+  useEffect(() => {
     const saved = localStorage.getItem("userform");
     if (saved) {
       const userdata = JSON.parse(saved);
@@ -108,7 +114,7 @@ export default function DashboardPage() {
         }
       }
     }
-  }, []); 
+  }, []);
 
   return (
     <>
@@ -123,6 +129,9 @@ export default function DashboardPage() {
             <a href="/mealplanner">meal planner</a>
             <a href="/foodscanner">food scanner</a>
           </div>
+          <button onClick={handleLogout} className="logout-button">
+            🚪 Logout
+          </button>
         </nav>
 
         <main className="dash-main">
@@ -157,7 +166,10 @@ export default function DashboardPage() {
             <div className="dash-results">
               {/* Maintenance calories always shown */}
               <div className="result-card">
-                <span className="result-number">{Math.round(dailyCal)}<Image src="/cal.svg" alt="Calories" width={20} height={20} /></span>
+                <span className="result-number">
+                  {Math.round(dailyCal)}
+                  <Image src="/cal.svg" alt="Calories" width={20} height={20} />
+                </span>
                 <span className="result-label">DAILY MAINTENANCE CALORIES</span>
               </div>
 
@@ -165,7 +177,13 @@ export default function DashboardPage() {
               {data.goal === "weight gain" && (
                 <div className="result-card highlight">
                   <span className="result-number animate-num">
-                    {Math.round(dailyCal + 500)}<Image src="/cal.svg" alt="Calories" width={20} height={20} />
+                    {Math.round(dailyCal + 500)}
+                    <Image
+                      src="/cal.svg"
+                      alt="Calories"
+                      width={20}
+                      height={20}
+                    />
                   </span>
                   <span className="result-label">
                     DAILY CALORIE REQUIREMENT FOR WEIGHT GAIN
@@ -177,7 +195,13 @@ export default function DashboardPage() {
               {data.goal === "weight loss" && (
                 <div className="result-card highlight">
                   <span className="result-number animate-num">
-                    {Math.round(dailyCal - 300)}<Image src="/cal.svg" alt="Calories" width={20} height={20} />
+                    {Math.round(dailyCal - 300)}
+                    <Image
+                      src="/cal.svg"
+                      alt="Calories"
+                      width={20}
+                      height={20}
+                    />
                   </span>
                   <span className="result-label">
                     DAILY CALORIE REQUIREMENT FOR WEIGHT LOSS
@@ -189,7 +213,13 @@ export default function DashboardPage() {
               {data.goal === "fat loss" && (
                 <div className="result-card highlight">
                   <span className="result-number animate-num">
-                    {Math.round(dailyCal - 300)}<Image src="/cal.svg" alt="Calories" width={20} height={20} />
+                    {Math.round(dailyCal - 300)}
+                    <Image
+                      src="/cal.svg"
+                      alt="Calories"
+                      width={20}
+                      height={20}
+                    />
                   </span>
                   <span className="result-label">
                     DAILY CALORIE REQUIREMENT FOR FAT LOSS
@@ -201,7 +231,13 @@ export default function DashboardPage() {
               {data.goal === "lean body" && (
                 <div className="result-card highlight">
                   <span className="result-number">
-                    {Math.round(dailyCal - 200)}<Image src="/cal.svg" alt="Calories" width={30} height={25} />
+                    {Math.round(dailyCal - 200)}
+                    <Image
+                      src="/cal.svg"
+                      alt="Calories"
+                      width={30}
+                      height={25}
+                    />
                   </span>
                   <span className="result-label">
                     DAILY CALORIE REQUIREMENT FOR LEAN BODY
@@ -236,9 +272,14 @@ export default function DashboardPage() {
           </section>
 
           <section className="dash-section">
-            <h2 className="dash-section-title">STEPS TO COMPLETE DAILY FOR {data.goal}</h2>
+            <h2 className="dash-section-title">
+              STEPS TO COMPLETE DAILY FOR {data.goal}
+            </h2>
             <div className="dash-steps">
-              <span className="steps-number">{steps}<Image src="/steps.svg" alt="Steps" width={50} height={25} /></span>
+              <span className="steps-number">
+                {steps}
+                <Image src="/steps.svg" alt="Steps" width={50} height={25} />
+              </span>
             </div>
           </section>
 
