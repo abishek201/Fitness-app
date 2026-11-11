@@ -103,10 +103,16 @@
 }
 
 .detail-row strong {
-  color: #1a1a2e;
+  color: #0a0a11;
   font-weight: 600;
   font-size: 0.95rem;
 }
+.detail-row-txt{
+  color: #0a0a11;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
 
 .dash-results {
   display: grid;

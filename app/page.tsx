@@ -143,6 +143,16 @@ export default function LandingPage() {
             <h3>EXERCISE PLANNER</h3>
             <p>Exercise planner for every body type and body goal</p>
           </div>
+          <div className="feature-card scroll-animate" style={{ transitionDelay: '300ms' }}>
+            <div className="feature-icon">🥗</div>
+            <h3>MEAL PLANNER</h3>
+            <p>Meal planner for every body type and body goal</p>
+          </div>
+          <div className="feature-card scroll-animate" style={{ transitionDelay: '300ms' }}>
+            <div className="feature-icon">📷</div>
+            <h3>FOOD SCANNER</h3>
+            <p>AI based food scanner to track nutritional intake</p>
+          </div>
         </div>
       </section>
 

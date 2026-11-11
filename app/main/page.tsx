@@ -1,7 +1,7 @@
 "use client";
 import Head from "next/head";
 import "./main.css";
-import { useEffect, useState  } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,10 +17,39 @@ export default function DashboardPage() {
       }
     }
   }, []);
+
+  function useCountUp(target: number, duration: number = 1600) {
+    const [display, setDisplay] = useState(0);
+
+    useEffect(() => {
+      if (!target) return;
+
+      let startTime: number | null = null;
+      let animationFrame: number;
+
+      const step = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        setDisplay(Math.round(target * progress));
+
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(step);
+        }
+      };
+
+      animationFrame = requestAnimationFrame(step);
+
+      // Cleanup when component unmounts
+      return () => cancelAnimationFrame(animationFrame);
+    }, [target, duration]);
+
+    return display;
+  }
   const router = useRouter();
 
   const handleLogout = () => {
     localStorage.removeItem("userform");
+    localStorage.removeItem("lastSyncedEmail");
 
     router.push("/");
   };
@@ -71,6 +100,17 @@ export default function DashboardPage() {
     steps = 12000;
   }
 
+  // Animated versions of your calculated values
+  const animatedCal = useCountUp(Math.round(dailyCal));
+  const animatedProtein = useCountUp(protien);
+  const animatedCarbs = useCountUp(carbs);
+  const animatedFats = useCountUp(fats);
+  const animatedSteps = useCountUp(steps);
+  const animatedage = useCountUp(data.age);
+  const animatedheight = useCountUp(data.height);
+  const animatedweight = useCountUp(data.weight);
+  const animatedname = useCountUp(data.name);
+
   useEffect(() => {
     const existing = localStorage.getItem("userform");
     const formData = existing ? JSON.parse(existing) : {};
@@ -89,32 +129,42 @@ export default function DashboardPage() {
       const userdata = JSON.parse(saved);
       if (userdata !== undefined) {
         setdata(userdata);
-
-        // Check if email exists
-        if (userdata.email) {
-          const lastSyncedEmail = localStorage.getItem("lastSyncedEmail");
-
-          // Only save to MongoDB if the email has changed or hasn't been synced yet
-          if (userdata.email !== lastSyncedEmail) {
-            fetch("/api/user", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(userdata),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                console.log("Database sync successful:", data);
-                // Remember this email so it doesn't trigger again on future reloads
-                localStorage.setItem("lastSyncedEmail", userdata.email);
-              })
-              .catch((err) => console.error("Database sync failed:", err));
-          }
-        }
       }
     }
   }, []);
+
+  // Sync to MongoDB only after data & calculations are ready
+  useEffect(() => {
+    if (data && data.weight && data.email) {
+      const lastSyncedEmail = localStorage.getItem("lastSyncedEmail");
+
+      // Build payload including the newly calculated targets
+      const payload = {
+        ...data,
+        caloriesTarget: Math.round(dailyCal),
+        proteinTarget: protien,
+        carbsTarget: carbs,
+        fatsTarget: fats,
+      };
+
+      // Only sync if the email hasn't been synced yet
+      if (data.email !== lastSyncedEmail) {
+        fetch("/api/user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        })
+          .then((res) => res.json())
+          .then((resData) => {
+            console.log("Database sync successful:", resData);
+            localStorage.setItem("lastSyncedEmail", data.email);
+          })
+          .catch((err) => console.error("Database sync failed:", err));
+      }
+    }
+  }, [data, dailyCal, protien, carbs, fats]);
 
   return (
     <>
@@ -144,19 +194,27 @@ export default function DashboardPage() {
               </div>
               <div className="detail-row">
                 <span>age</span>
-                <strong>{data.age}</strong>
+                <strong>{animatedage}</strong>
               </div>
               <div className="detail-row">
                 <span>height in Cms</span>
-                <strong>{data.height}</strong>
+                <strong>{animatedheight}</strong>
               </div>
               <div className="detail-row">
                 <span>weight in kg</span>
-                <strong>{data.weight}</strong>
+                <strong>{animatedweight}</strong>
               </div>
               <div className="detail-row">
-                <span>allergies from </span>
-                <strong>{data.allergies || "None"}</strong>
+                <span>allergies from</span>
+                <strong  className="detail-row-txt">
+                  {data.allergens && data.allergens.length > 0
+                    ? data.allergens.map((item, i) => (
+                        <span key={i} >
+                          {item}{i !== data.allergens.length - 1 ? ", " : ""}
+                        </span>
+                      ))
+                    : "None"}
+                </strong>
               </div>
             </div>
           </section>
@@ -167,7 +225,7 @@ export default function DashboardPage() {
               {/* Maintenance calories always shown */}
               <div className="result-card">
                 <span className="result-number">
-                  {Math.round(dailyCal)}
+                  {Math.round(animatedCal)}
                   <Image src="/cal.svg" alt="Calories" width={20} height={20} />
                 </span>
                 <span className="result-label">DAILY MAINTENANCE CALORIES</span>
@@ -177,7 +235,7 @@ export default function DashboardPage() {
               {data.goal === "weight gain" && (
                 <div className="result-card highlight">
                   <span className="result-number animate-num">
-                    {Math.round(dailyCal + 500)}
+                    {Math.round(animatedCal + 500)}
                     <Image
                       src="/cal.svg"
                       alt="Calories"
@@ -195,7 +253,7 @@ export default function DashboardPage() {
               {data.goal === "weight loss" && (
                 <div className="result-card highlight">
                   <span className="result-number animate-num">
-                    {Math.round(dailyCal - 300)}
+                    {Math.round(animatedCal - 300)}
                     <Image
                       src="/cal.svg"
                       alt="Calories"
@@ -213,7 +271,7 @@ export default function DashboardPage() {
               {data.goal === "fat loss" && (
                 <div className="result-card highlight">
                   <span className="result-number animate-num">
-                    {Math.round(dailyCal - 300)}
+                    {Math.round(animatedCal - 300)}
                     <Image
                       src="/cal.svg"
                       alt="Calories"
@@ -231,7 +289,7 @@ export default function DashboardPage() {
               {data.goal === "lean body" && (
                 <div className="result-card highlight">
                   <span className="result-number">
-                    {Math.round(dailyCal - 200)}
+                    {Math.round(animatedCal - 200)}
                     <Image
                       src="/cal.svg"
                       alt="Calories"
@@ -253,19 +311,19 @@ export default function DashboardPage() {
               <Link href="/carbs">
                 <div className="macro-item">
                   <span>Carbohydrates</span>
-                  <strong>{carbs}g</strong>
+                  <strong>{animatedCarbs}g</strong>
                 </div>
               </Link>
               <Link href="/protein">
                 <div className="macro-item">
                   <span>Protein</span>
-                  <strong>{protien}g</strong>
+                  <strong>{animatedProtein}g</strong>
                 </div>
               </Link>
               <Link href="/fats">
                 <div className="macro-item">
                   <span>Fats</span>
-                  <strong>{fats}g</strong>
+                  <strong>{animatedFats}g</strong>
                 </div>
               </Link>
             </div>
@@ -277,7 +335,7 @@ export default function DashboardPage() {
             </h2>
             <div className="dash-steps">
               <span className="steps-number">
-                {steps}
+                {animatedSteps}
                 <Image src="/steps.svg" alt="Steps" width={50} height={25} />
               </span>
             </div>
